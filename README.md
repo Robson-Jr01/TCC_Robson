@@ -91,7 +91,7 @@ Esse modelo coloca o artista no controle da própria identidade dentro da plataf
 
 ## 7. Panorama de Soluções Existentes 
 
-Uma pesquisa sobre o mercado atual revela que, embora existam iniciativas relacionadas ao tema, nenhuma delas resolve o problema da forma proposta pelo Palco. As principais soluções encontradas são: 
+Uma pesquisa sobre o mercado atual revela que, embora existam iniciativas relacionadas ao tema, nenhuma delas resolve o problema da forma proposta pela PECAC. As principais soluções encontradas são: 
 
 - _**Mapa da Cultura (Ministério da Cultura):**_ Permite o cadastro de agentes culturais e lista editais do governo federal. No entanto, é restrito a editais federais. Não centraliza editais de prefeituras municipais nem de empresas privadas, e não conta com app mobile ou notificações push. 
 
@@ -99,9 +99,9 @@ Uma pesquisa sobre o mercado atual revela que, embora existam iniciativas relaci
 
 - _**CAPAC (Prefeitura de São Paulo):**_ Sistema de credenciamento de artistas para agilizar contratações pela Secretaria de Cultura de São Paulo. É restrito ao município paulistano e serve exclusivamente para eventos da própria prefeitura, sem abertura para outros órgãos ou empresas. 
 
-### 7.1 O que diferencia o Palco: 
+### 7.1 O que diferencia a PECAC: 
 
-Nenhuma das soluções existentes combina os três elementos centrais do Palco: 
+Nenhuma das soluções existentes combina os três elementos centrais da PECAC: 
 - Perfil centralizado do artista com currículo e portfólio;
 - Notificação proativa e personalizada por área de atuação e localização;
 - Inscrição simplificada com um clique.
@@ -112,10 +112,8 @@ A lacuna identificada é, portanto, real e não endereçada pelo mercado, o que 
 
 ## 8. Pontos em Aberto / Decisões Futuras 
 
-- Definir tecnologias de desenvolvimento.
-- Modelagem do banco de dados para perfis de artistas e editais.
-- Estratégia de adoção: como convencer prefeituras a usar a plataforma como canal oficial. 
-
-Moderação de editais: como validar que os publicadores são legítimos. 
-
-Possibilidade de notificação por e-mail além do push notification. 
+- Definir tecnologias de desenvolvimento;
+- Modelagem do banco de dados para perfis de artistas e editais;
+- Estratégia de adoção: como convencer prefeituras a usar a plataforma como canal oficial;
+- Moderação de editais: como validar que os publicadores são legítimos;
+- Possibilidade de notificação por e-mail além do push notification.
