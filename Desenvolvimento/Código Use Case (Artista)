@@ -1,0 +1,20 @@
+flowchart LR
+    artista(["Artista"])
+
+    subgraph SISTEMA["Sistema PECAC"]
+        UC1(["Criar e editar perfil"])
+        UC2(["Cadastrar portfólio e redes"])
+        UC3(["Definir raio geográfico"])
+        UC4(["Receber notificação push"])
+        UC5(["Visualizar edital"])
+        UC6(["Inscrever-se com 1 clique"])
+        UC7(["Receber resultado da inscrição"])
+    end
+
+    artista --> UC1
+    artista --> UC2
+    artista --> UC3
+    artista --> UC4
+    artista --> UC7
+    UC4 -->|"«include»"| UC5
+    UC5 -->|"«include»"| UC6
