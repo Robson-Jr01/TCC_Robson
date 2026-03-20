@@ -1,5 +1,5 @@
 # PECAC_V1
-#### Desenvolvimento de Plataforma de Editais Culturais para Artistas e Contratantes 
+#### Desenvolvimento de Plataforma de Editais Culturais para Artistas e Contratantes na região de Jundiai
 **COLABORADORES** - _Robson Luiz da Conceição Júnior e Maria Cristina Lourencinho de Oliveira_ 
 
 ## 1. O Problema 
