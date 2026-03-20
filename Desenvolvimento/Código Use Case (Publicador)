@@ -1,0 +1,22 @@
+flowchart LR
+    pub(["Publicador"])
+
+    subgraph SISTEMA["Sistema PECAC"]
+        UC1(["Criar conta institucional"])
+        UC2(["Publicar edital"])
+        UC3(["Configurar filtros do edital"])
+        UC4(["Solicitar documentos extras"])
+        UC5(["Visualizar inscrições"])
+        UC6(["Avaliar e aprovar inscrições"])
+        UC7(["Encerrar edital"])
+    end
+
+    pub --> UC1
+    pub --> UC2
+    pub --> UC5
+    pub --> UC6
+    pub --> UC7
+    UC2 -->|"«include»"| UC3
+    UC2 -.->|"«extend»"| UC4
+    UC5 -->|"«include»"| UC6
+    UC6 -->|"«include»"| UC7
