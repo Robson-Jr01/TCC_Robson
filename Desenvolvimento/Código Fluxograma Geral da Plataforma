@@ -1,0 +1,28 @@
+flowchart TD
+    A([Início]) --> B{Tipo de usuário}
+    B -->|Artista| C[Cadastro no app mobile]
+    B -->|Publicador| D[Cadastro no painel web]
+
+    C --> E[Preenche perfil e portfólio]
+    E --> F[Define raio geográfico]
+    F --> G[Aguarda notificações]
+    G --> H[Recebe notificação push]
+    H --> I[Visualiza edital compatível]
+    I --> J[Clica em Quero me inscrever]
+    J --> K[Perfil enviado automaticamente]
+    K --> L[Aguarda resultado]
+    L --> M[Recebe resultado da inscrição]
+    M --> N([Fim])
+
+    D --> O[Preenche dados institucionais]
+    O --> P[Publica edital]
+    P --> Q[Configura área, local e prazo]
+    Q --> R{Exige documentos extras?}
+    R -->|Sim| S[Ativa seção de anexos]
+    R -->|Não| T[Edital publicado]
+    S --> T
+    T --> U[Sistema notifica artistas compatíveis]
+    U --> V[Visualiza inscrições recebidas]
+    V --> W[Avalia e aprova inscrições]
+    W --> X[Encerra edital]
+    X --> Y([Fim])
