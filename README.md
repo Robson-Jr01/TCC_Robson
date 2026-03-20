@@ -89,26 +89,32 @@ Ao publicar um edital, prefeituras e empresas podem aplicar filtros por esses cr
 
 Esse modelo coloca o artista no controle da própria identidade dentro da plataforma, sem depender de algoritmos externos, e permite que os publicadores encontrem exatamente o perfil que procuram. 
 
-## 7. Panorama de Soluções Existentes 
+## 7. Panorama de Soluções Existentes
 
-Uma pesquisa sobre o mercado atual revela que, embora existam iniciativas relacionadas ao tema, nenhuma delas resolve o problema da forma proposta pela PECAC. As principais soluções encontradas são: 
+Uma pesquisa sobre o mercado atual revela que, embora existam iniciativas relacionadas ao tema, mas nenhuma delas resolve o problema da forma proposta
+pela PECAC. As principais soluções encontradas são:
 
-- _**Mapa da Cultura (Ministério da Cultura):**_ Permite o cadastro de agentes culturais e lista editais do governo federal. No entanto, é restrito a editais federais. Não centraliza editais de prefeituras municipais nem de empresas privadas, e não conta com app mobile ou notificações push. 
+-_**Mapa da Cultura (Ministério da Cultura):**_ Plataforma oficial do governo federal que reúne editais, agentes culturais, espaços, eventos e projetos em todo o país. Em dezembro de 2024, recebeu uma atualização significativa (versão 7), com interface mais intuitiva e experiência mobile otimizada. No entanto, permanece restrita a editais do próprio Ministério da Cultura, não centralizando editais de prefeituras municipais nem de empresas privadas. Embora a nova versão envie notificações por e-mail ao usuário, não conta com aplicativo mobile dedicado nem com notificações push baseadas em geolocalização e perfil artístico.
 
-- _**Editais e Afins:**_ Portal ativo desde 2015 que agrega editais de arte e cultura em um único lugar. Funciona como um blog/agregador, exigindo que o artista entre no site e busque manualmente as oportunidades. Não há perfil de artista, filtro por área de atuação nem inscrição simplificada. Além disso,  a publicação de edital mais recente é datada de 2022. 
+-_**Editais e Afins:**_ Portal ativo desde maio de 2015 que agrega editais de arte e cultura em um único lugar. Funciona como um blog/agregador, exigindo que o artista acesse o site e busque manualmente as oportunidades. Não há perfil de artista, filtro por área de atuação nem inscrição simplificada. A última publicação de edital registrada data de 2021, indicando inatividade na curadoria de conteúdo.
 
-- _**CAPAC (Prefeitura de São Paulo):**_ Sistema de credenciamento de artistas para agilizar contratações pela Secretaria de Cultura de São Paulo. É restrito ao município paulistano e serve exclusivamente para eventos da própria prefeitura, sem abertura para outros órgãos ou empresas. 
+-_**Prosas:**_ Plataforma digital que centraliza editais de diversas áreas — cultura, educação, saúde e meio ambiente — e oferece ferramentas de gestão para as instituições publicadoras, contando com mais de 175 mil usuários cadastrados e mais de 12 mil editais gerenciados. Do ponto de vista do artista, porém, a experiência permanece passiva: é necessário acessar o site e buscar manualmente as oportunidades disponíveis. Não há perfil permanente do artista com portfólio reutilizável, notificações push personalizadas por área de atuação ou geolocalização, nem aplicativo mobile dedicado. O foco principal da plataforma é a gestão administrativa dos editais pelas instituições, não a descoberta proativa de oportunidades pelos artistas.
 
-### 7.1 O que diferencia a PECAC: 
+-_**Acheaqui Arte e Cultura:**_ Portal de divulgação de editais culturais em funcionamento desde 2009, com atuação em todo o Brasil. Agrega editais de diversas áreas artísticas e conta com um cadastro de artistas que cria páginas de divulgação dentro do próprio portal. Apesar de sua abrangência nacional e longevidade, o modelo é essencialmente passivo: o artista navega pelo site para encontrar editais, sem receber notificações personalizadas. O cadastro funciona como vitrine de divulgação, não como perfil reutilizável para inscrições automáticas. Não há aplicativo mobile nem filtros por geolocalização.
 
-Nenhuma das soluções existentes combina os três elementos centrais da PECAC: 
-- Perfil centralizado do artista com currículo e portfólio;
-- Notificação proativa e personalizada por área de atuação e localização;
+-_**Porta de Entrada (Prefeitura de São Paulo):**_ Lançada em 2024 pela Secretaria Municipal de Cultura de São Paulo para substituir os sistemas anteriores CAPAC e IGSIS, a plataforma centraliza e simplifica o acesso de artistas e produtores locais aos editais, cursos e programas da Secretaria. Após o cadastro, os artistas podem salvar seus projetos e selecionar, de maneira prática, os programas aos quais desejam se candidatar. No entanto, o cadastro não garante contratação, funcionando como ferramenta de caráter consultivo para os programadores. A plataforma permanece restrita ao município de São Paulo e atende exclusivamente à Secretaria Municipal de Cultura, sem abertura para outras prefeituras ou empresas privadas. Não conta com aplicativo mobile nem com notificações push baseadas em geolocalização.
+
+### 7.1 O que diferencia a PECAC
+
+Nenhuma das soluções existentes combina os três elementos centrais da PECAC:
+
+- Perfil centralizado do artista com currículo e portfólio reutilizável;
+- Notificação proativa e personalizada por área de atuação e geolocalização;
 - Inscrição simplificada com um clique.
 
-As alternativas atuais são portais passivos, o artista precisa correr atrás, ou sistemas internos de uma única instituição. 
+As alternativas atuais são portais passivos — o artista precisa correr atrás das oportunidades — ou sistemas internos de uma única instituição. Plataformas de maior abrangência, como a Prosas e o Acheaqui, avançam na centralização e divulgação de editais em escala nacional, mas mantêm o artista em posição reativa. O Porta de Entrada representa um avanço em relação aos sistemas anteriores ao reunir editais, cursos e programas em um único ambiente digital, mas mantém as mesmas limitações estruturais: é restrito ao município de São Paulo, serve exclusivamente à Secretaria Municipal de Cultura e não conta com aplicativo mobile nem com notificações push baseadas em perfil e geolocalização do artista.
 
-A lacuna identificada é, portanto, real e não endereçada pelo mercado, o que reforça a relevância e a originalidade da proposta. 
+A lacuna identificada é, portanto, real e não endereçada pelo mercado, o que reforça a relevância e a originalidade da proposta.
 
 ## 8. Pontos em Aberto / Decisões Futuras 
 
