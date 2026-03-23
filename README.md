@@ -128,7 +128,6 @@ Por fim, o PostgreSQL foi adotado como banco de dados por ser uma solução grat
 
 ## 9. Pontos em Aberto / Decisões Futuras 
 
-- Modelagem do banco de dados para perfis de artistas e editais;
 - Estratégia de adoção: como convencer prefeituras a usar a plataforma como canal oficial;
 - Moderação de editais: como validar que os publicadores são legítimos;
 - Possibilidade de notificação por e-mail além do push notification.
