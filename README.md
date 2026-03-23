@@ -116,9 +116,18 @@ As alternativas atuais são portais passivos em que o artista precisa correr atr
 
 A lacuna identificada é, portanto, real e não endereçada pelo mercado, o que reforça a relevância e a originalidade da proposta.
 
-## 8. Pontos em Aberto / Decisões Futuras 
+## 8. Tecnologias de desenvolvimento
 
-- Definir tecnologias de desenvolvimento;
+Para o desenvolvimento da PECAC foram escolhidas tecnologias baseadas em JavaScript/TypeScript em todas as camadas do sistema, sendo React Native com Expo para o aplicativo mobile, React para o painel web e Node.js com Express para o servidor, utilizando PostgreSQL como banco de dados. A principal vantagem dessa escolha é que todas as partes do sistema utilizam a mesma linguagem de programação, o que simplifica o desenvolvimento, facilita a manutenção e reduz o tempo de aprendizado ao longo do projeto. 
+
+O React Native foi escolhido para o aplicativo dos artistas por permitir que um único código funcione tanto em Android quanto em iOS, eliminando a necessidade de desenvolver dois projetos separados para cada sistema operacional. Junto ao React Native, foi adotado o Expo, uma ferramenta que simplifica significativamente o ambiente de desenvolvimento mobile. Sem o Expo, seria necessário configurar manualmente diversas ferramentas antes de escrever qualquer linha de código. Com ele, é possível visualizar o aplicativo funcionando no celular em tempo real durante o desenvolvimento, além de contar com suporte nativo a notificações push por meio da biblioteca Expo Notifications, que é uma das funcionalidades centrais da plataforma. 
+
+O React foi adotado para o painel web dos publicadores por ser amplamente utilizado no mercado, com boa documentação e grande comunidade de suporte. Sua estrutura baseada em componentes reutilizáveis é especialmente adequada para interfaces mais complexas, como formulários de publicação de editais e painéis de visualização de inscrições recebidas. O Node.js com Express foi escolhido para o servidor por ser leve, eficiente e compatível com a mesma linguagem utilizada no restante do projeto, permitindo que toda a comunicação entre o aplicativo, o painel web e o banco de dados seja gerenciada de forma centralizada. 
+
+Por fim, o PostgreSQL foi adotado como banco de dados por ser uma solução gratuita, confiável e amplamente utilizada em aplicações profissionais. Sua estrutura relacional é adequada para representar as entidades do sistema, como artistas, editais, inscrições e documentos. Um ponto relevante para a PECAC é a necessidade de cruzar a lista de cidades selecionadas pelo artista com a cidade informada pelo publicador no edital, determinando quais artistas devem ser notificados. Esse tipo de consulta é realizado de forma simples e eficiente em um banco de dados relacional como o PostgreSQL. 
+
+## 9. Pontos em Aberto / Decisões Futuras 
+
 - Modelagem do banco de dados para perfis de artistas e editais;
 - Estratégia de adoção: como convencer prefeituras a usar a plataforma como canal oficial;
 - Moderação de editais: como validar que os publicadores são legítimos;
