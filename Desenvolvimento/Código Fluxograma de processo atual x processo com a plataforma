@@ -8,18 +8,18 @@ flowchart LR
         C1 --> F1[Oportunidades perdidas]
         D1 --> F1
         E1 --> F1
-
         P1[Publicador] --> PB1[Publica em canais próprios\nSite, Instagram, WhatsApp...]
         PB1 --> PC1[Alcance limitado\nDepende da rede informal]
     end
 
     subgraph DEPOIS["Com a PECAC"]
         direction TB
-        A2[Artista] --> B2[Recebe notificação push]
+        A2[Artista] --> CA2[Cadastra perfil e portfólio\nDefine cidades de atuação]
+        CA2 --> B2[Recebe notificação push]
         B2 --> C2[Visualiza edital compatível]
         C2 --> D2[Inscrição com 1 clique]
         D2 --> E2[Recebe resultado da inscrição]
-
+        E2 --> UP2[Atualiza perfil se necessário]
         P2[Publicador] --> PB2[Publica no painel web PECAC\nÁrea, localização, prazo]
         PB2 --> PC2[Recebe perfis filtrados\nCurrículo e portfólio dos artistas]
         PC2 --> PD2[Avalia e encerra edital]
