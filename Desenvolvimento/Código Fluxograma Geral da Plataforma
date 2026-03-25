@@ -4,19 +4,21 @@ flowchart TD
     B -->|Publicador| D[Cadastro no painel web]
 
     C --> E[Preenche perfil e portfólio]
-    E --> F[Define raio geográfico]
+    E --> F[Seleciona cidades de atuação]
     F --> G[Aguarda notificações]
     G --> H[Recebe notificação push]
     H --> I[Visualiza edital compatível]
-    I --> J[Clica em Quero me inscrever]
-    J --> K[Perfil enviado automaticamente]
-    K --> L[Aguarda resultado]
-    L --> M[Recebe resultado da inscrição]
-    M --> N([Fim])
+    I --> J{Edital exige documentos extras?}
+    J -->|Sim| JA[Anexa documentos extras]
+    J -->|Não| K[Clica em Quero me inscrever]
+    JA --> K
+    K --> L[Perfil enviado automaticamente]
+    L --> M[Aguarda resultado]
+    M --> N[Recebe resultado da inscrição]
+    N --> O([Fim])
 
-    D --> O[Preenche dados institucionais]
-    O --> P[Publica edital]
-    P --> Q[Configura área, local e prazo]
+    D --> P[Preenche dados institucionais]
+    P --> Q[Publica edital com filtros\nÁrea, cidade e prazo]
     Q --> R{Exige documentos extras?}
     R -->|Sim| S[Ativa seção de anexos]
     R -->|Não| T[Edital publicado]
