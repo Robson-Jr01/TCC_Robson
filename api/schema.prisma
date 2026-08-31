@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model artista_cidades {
+  artista_id Int
+  cidade_id  Int
+  artistas   artistas @relation(fields: [artista_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  cidades    cidades  @relation(fields: [cidade_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([artista_id, cidade_id])
+}
+
+model artista_especialidades {
+  artista_id       Int
+  especialidade_id Int
+  artistas         artistas       @relation(fields: [artista_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  especialidades   especialidades @relation(fields: [especialidade_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([artista_id, especialidade_id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model artistas {
+  id                     Int                      @id @default(autoincrement())
+  nome                   String                   @db.VarChar(150)
+  email                  String                   @unique @db.VarChar(150)
+  senha_hash             String                   @db.VarChar(255)
+  tempo_carreira         String?                  @db.VarChar(20)
+  curriculo              String?
+  portfolio_url          String?                  @db.VarChar(255)
+  criado_em              DateTime?                @default(now()) @db.Timestamp(6)
+  artista_cidades        artista_cidades[]
+  artista_especialidades artista_especialidades[]
+  inscricoes             inscricoes[]
+  notificacoes           notificacoes[]
+}
+
+model categorias {
+  id             Int              @id @default(autoincrement())
+  nome           String           @unique @db.VarChar(100)
+  editais        editais[]
+  especialidades especialidades[]
+}
+
+model cidades {
+  id              Int               @id @default(autoincrement())
+  nome            String            @unique @db.VarChar(100)
+  artista_cidades artista_cidades[]
+  editais         editais[]
+  publicadores    publicadores[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model editais {
+  id               Int             @id @default(autoincrement())
+  publicador_id    Int
+  titulo           String          @db.VarChar(200)
+  categoria_id     Int
+  especialidade_id Int?
+  cidade_id        Int
+  descricao        String?
+  premio           String?         @db.VarChar(100)
+  prazo_inscricao  DateTime        @db.Date
+  exige_documentos Boolean?        @default(false)
+  status           String?         @default("aberto") @db.VarChar(20)
+  criado_em        DateTime?       @default(now()) @db.Timestamp(6)
+  categorias       categorias      @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cidades          cidades         @relation(fields: [cidade_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  especialidades   especialidades? @relation(fields: [especialidade_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  publicadores     publicadores    @relation(fields: [publicador_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  inscricoes       inscricoes[]
+  notificacoes     notificacoes[]
+}
+
+model especialidades {
+  id                     Int                      @id @default(autoincrement())
+  categoria_id           Int
+  nome                   String                   @db.VarChar(100)
+  artista_especialidades artista_especialidades[]
+  editais                editais[]
+  categorias             categorias               @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([categoria_id, nome])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model inscricoes {
+  id             Int       @id @default(autoincrement())
+  edital_id      Int
+  artista_id     Int
+  status         String?   @default("pendente") @db.VarChar(20)
+  documentos_url String?   @db.VarChar(255)
+  inscrito_em    DateTime? @default(now()) @db.Timestamp(6)
+  artistas       artistas  @relation(fields: [artista_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  editais        editais   @relation(fields: [edital_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([edital_id, artista_id])
+}
+
+model notificacoes {
+  id         Int       @id @default(autoincrement())
+  artista_id Int
+  edital_id  Int?
+  mensagem   String    @db.VarChar(255)
+  lida       Boolean?  @default(false)
+  criado_em  DateTime? @default(now()) @db.Timestamp(6)
+  artistas   artistas  @relation(fields: [artista_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  editais    editais?  @relation(fields: [edital_id], references: [id], onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model publicadores {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(150)
+  tipo       String    @db.VarChar(20)
+  email      String    @unique @db.VarChar(150)
+  senha_hash String    @db.VarChar(255)
+  cidade_id  Int
+  criado_em  DateTime? @default(now()) @db.Timestamp(6)
+  editais    editais[]
+  cidades    cidades   @relation(fields: [cidade_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
