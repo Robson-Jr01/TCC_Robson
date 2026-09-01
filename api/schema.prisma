@@ -37,6 +37,7 @@ model artistas {
   criado_em              DateTime?                @default(now()) @db.Timestamp(6)
   artista_cidades        artista_cidades[]
   artista_especialidades artista_especialidades[]
+  artista_redes_sociais  artista_redes_sociais[]
   inscricoes             inscricoes[]
   notificacoes           notificacoes[]
 }
@@ -125,4 +126,15 @@ model publicadores {
   criado_em  DateTime? @default(now()) @db.Timestamp(6)
   editais    editais[]
   cidades    cidades   @relation(fields: [cidade_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model artista_redes_sociais {
+  id         Int      @id @default(autoincrement())
+  artista_id Int
+  plataforma String   @db.VarChar(20)
+  url        String   @db.VarChar(255)
+  artistas   artistas @relation(fields: [artista_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([artista_id, plataforma])
 }
