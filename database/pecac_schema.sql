@@ -90,6 +90,13 @@ CREATE TABLE notificacoes (
     lida BOOLEAN DEFAULT FALSE,
     criado_em TIMESTAMP DEFAULT NOW()
 );
+CREATE TABLE edital_cidades (
+    edital_id INTEGER NOT NULL REFERENCES editais(id) ON DELETE CASCADE,
+    cidade_id INTEGER NOT NULL REFERENCES cidades(id),
+    PRIMARY KEY (edital_id, cidade_id)
+);
+
+ALTER TABLE editais DROP COLUMN cidade_id;
 
 INSERT INTO cidades (nome) VALUES
     ('Jundiaí'), ('Cabreúva'), ('Campo Limpo Paulista'),

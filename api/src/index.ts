@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 const app = express();
 const prisma = new PrismaClient();
 
-// Fila de notificações (estrutura FIFO simples)
+// Fila de notificações (estrutura FIFO simples, em memória)
 type ItemFila = { artistaId: number; editalId: number; mensagem: string };
 const filaDeNotificacoes: ItemFila[] = [];
 
@@ -15,9 +15,10 @@ function enfileirar(item: ItemFila) {
   filaDeNotificacoes.push(item); // O(1)
 }
 
+// Consumidor: drena a fila inteira, na ordem de chegada (FIFO)
 async function processarFila() {
   while (filaDeNotificacoes.length > 0) {
-    const item = filaDeNotificacoes.shift(); // remove o primeiro da fila (FIFO)
+    const item = filaDeNotificacoes.shift(); // O(1) - remove o primeiro
     if (!item) break;
     await prisma.notificacoes.create({
       data: {
@@ -124,11 +125,12 @@ app.post("/editais", async (req, res) => {
       titulo,
       categoria_id,
       especialidade_id,
-      cidade_id,
+      cidade_ids, // agora é uma lista: [1, 3, 5]
       descricao,
       premio,
       prazo_inscricao,
       exige_documentos,
+      vagas,
     } = req.body;
 
     const edital = await prisma.editais.create({
@@ -137,12 +139,16 @@ app.post("/editais", async (req, res) => {
         titulo,
         categoria_id,
         especialidade_id,
-        cidade_id,
         descricao,
         premio,
         prazo_inscricao: new Date(prazo_inscricao),
         exige_documentos: exige_documentos ?? false,
+        vagas: vagas ?? null,
+        edital_cidades: {
+          create: (cidade_ids || []).map((id: number) => ({ cidade_id: id })),
+        },
       },
+      include: { edital_cidades: true },
     });
 
     res.status(201).json(edital);
@@ -207,13 +213,20 @@ app.post("/editais/:id/notificar", async (req, res) => {
       return res.status(404).json({ erro: "Edital não encontrado" });
     }
 
-    // Interseção: artistas cuja especialidade E cidade batem com o edital
+    // Busca todas as cidades vinculadas a esse edital
+    const cidadesDoEdital = await prisma.edital_cidades.findMany({
+      where: { edital_id: editalId },
+      select: { cidade_id: true },
+    });
+    const idsCidades = cidadesDoEdital.map((c) => c.cidade_id);
+
+    // Interseção: artistas cuja especialidade bate E cuja cidade está entre as do edital
     const artistasCompativeis = await prisma.artistas.findMany({
       where: {
         artista_especialidades: edital.especialidade_id
           ? { some: { especialidade_id: edital.especialidade_id } }
           : undefined,
-        artista_cidades: { some: { cidade_id: edital.cidade_id } },
+        artista_cidades: { some: { cidade_id: { in: idsCidades } } },
       },
     });
 
@@ -226,7 +239,7 @@ app.post("/editais/:id/notificar", async (req, res) => {
       });
     }
 
-    await processarFila();
+    processarFila(); // roda em segundo plano, sem travar a resposta
 
     res.json({
       mensagem: `${artistasCompativeis.length} artista(s) notificado(s)`,
@@ -235,6 +248,40 @@ app.post("/editais/:id/notificar", async (req, res) => {
   } catch (error) {
     res.status(400).json({ erro: "Não foi possível processar as notificações", detalhes: error });
   }
+});
+
+// Lista os editais de um publicador específico, com contagem de inscrições
+app.get("/publicadores/:id/editais", async (req, res) => {
+  try {
+    const publicadorId = Number(req.params.id);
+
+    const editais = await prisma.editais.findMany({
+      where: { publicador_id: publicadorId },
+      include: {
+        categorias: true,
+        _count: { select: { inscricoes: true } },
+      },
+      orderBy: { criado_em: "desc" },
+    });
+
+    res.json(editais);
+  } catch (error) {
+    res.status(400).json({ erro: "Não foi possível listar os editais", detalhes: error });
+  }
+});
+
+// Lista categorias, cada uma já trazendo suas especialidades
+app.get("/categorias", async (req, res) => {
+  const categorias = await prisma.categorias.findMany({
+    include: { especialidades: true },
+  });
+  res.json(categorias);
+});
+
+// Lista todas as cidades
+app.get("/cidades", async (req, res) => {
+  const cidades = await prisma.cidades.findMany();
+  res.json(cidades);
 });
 
 const PORT = 3000;

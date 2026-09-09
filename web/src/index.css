@@ -1,0 +1,22 @@
+:root {
+  --cor-primaria: #4a35d4;
+  --cor-texto: #1a1a2e;
+  --cor-texto-secundario: #888;
+  --cor-fundo: #f4f4f6;
+  --cor-borda: #e5e5e5;
+  --cor-sucesso-bg: #e1f5ee;
+  --cor-sucesso-texto: #085041;
+  --cor-alerta-bg: #faeeda;
+  --cor-alerta-texto: #633806;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+button { cursor: pointer; font-family: inherit; }
+input, select, textarea { font-family: inherit; }
