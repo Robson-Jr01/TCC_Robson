@@ -59,24 +59,25 @@ model cidades {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model editais {
-  id               Int              @id @default(autoincrement())
-  publicador_id    Int
-  titulo           String           @db.VarChar(200)
-  categoria_id     Int
-  especialidade_id Int?
-  descricao        String?
-  premio           String?          @db.VarChar(100)
-  prazo_inscricao  DateTime         @db.Date
-  exige_documentos Boolean?         @default(false)
-  status           String?          @default("aberto") @db.VarChar(20)
-  criado_em        DateTime?        @default(now()) @db.Timestamp(6)
-  vagas            Int?
-  categorias       categorias       @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  especialidades   especialidades?  @relation(fields: [especialidade_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  publicadores     publicadores     @relation(fields: [publicador_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  edital_cidades   edital_cidades[]
-  inscricoes       inscricoes[]
-  notificacoes     notificacoes[]
+  id                    Int              @id @default(autoincrement())
+  publicador_id         Int
+  titulo                String           @db.VarChar(200)
+  categoria_id          Int
+  especialidade_id      Int?
+  descricao             String?
+  premio                String?          @db.VarChar(100)
+  prazo_inscricao       DateTime         @db.Date
+  exige_documentos      Boolean?         @default(false)
+  status                String?          @default("aberto") @db.VarChar(20)
+  criado_em             DateTime?        @default(now()) @db.Timestamp(6)
+  vagas                 Int?
+  instrucoes_documentos String?
+  categorias            categorias       @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  especialidades        especialidades?  @relation(fields: [especialidade_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  publicadores          publicadores     @relation(fields: [publicador_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  edital_cidades        edital_cidades[]
+  inscricoes            inscricoes[]
+  notificacoes          notificacoes[]
 }
 
 model especialidades {

@@ -14,6 +14,7 @@ export default function PublicarEdital() {
   const [especialidadeId, setEspecialidadeId] = useState("");
   const [cidadeIds, setCidadeIds] = useState<number[]>([]);
   const [temLimiteVagas, setTemLimiteVagas] = useState(false);
+  const [exigeDocumentos, setExigeDocumentos] = useState(false);
   const [mensagem, setMensagem] = useState("");
   const navigate = useNavigate();
   const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
@@ -48,7 +49,8 @@ export default function PublicarEdital() {
           ? `R$ ${Number(form.get("premio")).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
           : null,
         prazo_inscricao: form.get("prazo_inscricao"),
-        exige_documentos: form.get("exige_documentos") === "on",
+        exige_documentos: exigeDocumentos,
+        instrucoes_documentos: exigeDocumentos ? form.get("instrucoes_documentos") : null,
         vagas: temLimiteVagas ? Number(form.get("vagas")) : null,
       });
       setMensagem("Edital publicado com sucesso!");
@@ -125,9 +127,15 @@ export default function PublicarEdital() {
           )}
 
           <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, marginTop: 8 }}>
-            <input type="checkbox" name="exige_documentos" />
+            <input type="checkbox" checked={exigeDocumentos} onChange={(e) => setExigeDocumentos(e.target.checked)} />
             Exige documentos complementares na inscrição
           </label>
+
+          {exigeDocumentos && (
+            <Campo label="Quais documentos são necessários?">
+              <textarea name="instrucoes_documentos" rows={2} placeholder="Ex: RG, comprovante de residência" style={inputStyle} />
+            </Campo>
+          )}
 
           <button type="submit" style={btnStyle}>Publicar edital</button>
         </form>

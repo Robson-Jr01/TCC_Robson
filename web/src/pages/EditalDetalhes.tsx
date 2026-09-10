@@ -12,6 +12,7 @@ type Edital = {
   prazo_inscricao: string;
   vagas: number | null;
   exige_documentos: boolean;
+  instrucoes_documentos: string | null;
 };
 
 export default function EditalDetalhes() {
@@ -23,6 +24,7 @@ export default function EditalDetalhes() {
   const [especialidadeId, setEspecialidadeId] = useState("");
   const [cidadeIds, setCidadeIds] = useState<number[]>([]);
   const [temLimiteVagas, setTemLimiteVagas] = useState(false);
+  const [exigeDocumentos, setExigeDocumentos] = useState(false);
   const [carregando, setCarregando] = useState(true);
   const [mensagem, setMensagem] = useState("");
   const [edital, setEdital] = useState<Edital | null>(null);
@@ -36,6 +38,7 @@ export default function EditalDetalhes() {
       setEspecialidadeId(dados.especialidade_id ? String(dados.especialidade_id) : "");
       setCidadeIds(dados.edital_cidades.map((ec: { cidade_id: number }) => ec.cidade_id));
       setTemLimiteVagas(dados.vagas !== null);
+      setExigeDocumentos(dados.exige_documentos);
       setEdital(dados);
       setCarregando(false);
     });
@@ -65,7 +68,8 @@ export default function EditalDetalhes() {
           ? `R$ ${Number(form.get("premio")).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
           : null,
         prazo_inscricao: form.get("prazo_inscricao"),
-        exige_documentos: form.get("exige_documentos") === "on",
+        exige_documentos: exigeDocumentos,
+        instrucoes_documentos: exigeDocumentos ? form.get("instrucoes_documentos") : null,
         vagas: temLimiteVagas ? Number(form.get("vagas")) : null,
       });
       setMensagem("Alterações salvas com sucesso!");
@@ -145,9 +149,15 @@ export default function EditalDetalhes() {
             )}
 
             <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, marginTop: 8 }}>
-              <input type="checkbox" name="exige_documentos" defaultChecked={edital?.exige_documentos} />
+              <input type="checkbox" checked={exigeDocumentos} onChange={(e) => setExigeDocumentos(e.target.checked)} />
               Exige documentos complementares na inscrição
             </label>
+
+            {exigeDocumentos && (
+              <Campo label="Quais documentos são necessários?">
+                <textarea name="instrucoes_documentos" rows={2} defaultValue={edital?.instrucoes_documentos ?? ""} style={inputStyle} />
+              </Campo>
+            )}
 
             <button type="submit" style={btnStyle}>Salvar alterações</button>
           </form>

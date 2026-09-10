@@ -125,11 +125,12 @@ app.post("/editais", async (req, res) => {
       titulo,
       categoria_id,
       especialidade_id,
-      cidade_ids, // agora é uma lista: [1, 3, 5]
+      cidade_ids,
       descricao,
       premio,
       prazo_inscricao,
       exige_documentos,
+      instrucoes_documentos,
       vagas,
     } = req.body;
 
@@ -143,6 +144,7 @@ app.post("/editais", async (req, res) => {
         premio,
         prazo_inscricao: new Date(prazo_inscricao),
         exige_documentos: exige_documentos ?? false,
+        instrucoes_documentos: exige_documentos ? instrucoes_documentos : null,
         vagas: vagas ?? null,
         edital_cidades: {
           create: (cidade_ids || []).map((id: number) => ({ cidade_id: id })),
@@ -152,7 +154,7 @@ app.post("/editais", async (req, res) => {
     });
 
     res.status(201).json(edital);
-    } catch (error) {
+  } catch (error) {
     console.error(error);
     res.status(400).json({ erro: "Não foi possível publicar o edital", detalhes: String(error) });
   }
@@ -161,7 +163,7 @@ app.post("/editais", async (req, res) => {
 // Login (artista ou publicador)
 app.post("/login", async (req, res) => {
   try {
-    const { email, senha, tipo } = req.body; // tipo: "artista" ou "publicador"
+    const { email, senha, tipo } = req.body;
 
     const usuario =
       tipo === "artista"
@@ -214,14 +216,12 @@ app.post("/editais/:id/notificar", async (req, res) => {
       return res.status(404).json({ erro: "Edital não encontrado" });
     }
 
-    // Busca todas as cidades vinculadas a esse edital
     const cidadesDoEdital = await prisma.edital_cidades.findMany({
       where: { edital_id: editalId },
       select: { cidade_id: true },
     });
     const idsCidades = cidadesDoEdital.map((c) => c.cidade_id);
 
-    // Interseção: artistas cuja especialidade bate E cuja cidade está entre as do edital
     const artistasCompativeis = await prisma.artistas.findMany({
       where: {
         artista_especialidades: edital.especialidade_id
@@ -231,7 +231,6 @@ app.post("/editais/:id/notificar", async (req, res) => {
       },
     });
 
-    // Enfileira uma notificação pra cada artista compatível
     for (const artista of artistasCompativeis) {
       enfileirar({
         artistaId: artista.id,
@@ -240,7 +239,7 @@ app.post("/editais/:id/notificar", async (req, res) => {
       });
     }
 
-    processarFila(); // roda em segundo plano, sem travar a resposta
+    processarFila();
 
     res.json({
       mensagem: `${artistasCompativeis.length} artista(s) notificado(s)`,
@@ -289,7 +288,7 @@ app.get("/cidades", async (req, res) => {
 app.patch("/editais/:id/status", async (req, res) => {
   try {
     const editalId = Number(req.params.id);
-    const { status } = req.body; // "aberto" | "em_analise" | "encerrado"
+    const { status } = req.body;
 
     const edital = await prisma.editais.update({
       where: { id: editalId },
@@ -318,9 +317,9 @@ app.get("/editais/:id/inscricoes", async (req, res) => {
     });
 
     res.json(inscricoes);
-    } catch (error) {
+  } catch (error) {
     console.error(error);
-    res.status(400).json({ erro: "Não foi possível publicar o edital", detalhes: String(error) });
+    res.status(400).json({ erro: "Não foi possível listar as inscrições", detalhes: String(error) });
   }
 });
 
@@ -328,7 +327,7 @@ app.get("/editais/:id/inscricoes", async (req, res) => {
 app.patch("/inscricoes/:id/status", async (req, res) => {
   try {
     const inscricaoId = Number(req.params.id);
-    const { status } = req.body; // "pendente" | "selecionado" | "nao_selecionado"
+    const { status } = req.body;
 
     const inscricao = await prisma.inscricoes.update({
       where: { id: inscricaoId },
@@ -355,9 +354,9 @@ app.get("/editais/:id", async (req, res) => {
     });
     if (!edital) return res.status(404).json({ erro: "Edital não encontrado" });
     res.json(edital);
-    } catch (error) {
+  } catch (error) {
     console.error(error);
-    res.status(400).json({ erro: "Não foi possível publicar o edital", detalhes: String(error) });
+    res.status(400).json({ erro: "Não foi possível buscar o edital", detalhes: String(error) });
   }
 });
 
@@ -365,9 +364,19 @@ app.get("/editais/:id", async (req, res) => {
 app.put("/editais/:id", async (req, res) => {
   try {
     const editalId = Number(req.params.id);
-    const { titulo, categoria_id, especialidade_id, cidade_ids, descricao, premio, prazo_inscricao, exige_documentos, vagas } = req.body;
+    const {
+      titulo,
+      categoria_id,
+      especialidade_id,
+      cidade_ids,
+      descricao,
+      premio,
+      prazo_inscricao,
+      exige_documentos,
+      instrucoes_documentos,
+      vagas,
+    } = req.body;
 
-    // Refaz os vínculos de cidade do zero (apaga os antigos, cria os novos)
     await prisma.edital_cidades.deleteMany({ where: { edital_id: editalId } });
 
     const edital = await prisma.editais.update({
@@ -380,6 +389,7 @@ app.put("/editais/:id", async (req, res) => {
         premio,
         prazo_inscricao: new Date(prazo_inscricao),
         exige_documentos,
+        instrucoes_documentos: exige_documentos ? instrucoes_documentos : null,
         vagas,
         edital_cidades: {
           create: (cidade_ids || []).map((id: number) => ({ cidade_id: id })),
@@ -390,7 +400,8 @@ app.put("/editais/:id", async (req, res) => {
 
     res.json(edital);
   } catch (error) {
-    res.status(400).json({ erro: "Não foi possível atualizar o edital", detalhes: error });
+    console.error(error);
+    res.status(400).json({ erro: "Não foi possível atualizar o edital", detalhes: String(error) });
   }
 });
 
