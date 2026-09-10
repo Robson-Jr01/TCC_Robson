@@ -152,8 +152,9 @@ app.post("/editais", async (req, res) => {
     });
 
     res.status(201).json(edital);
-  } catch (error) {
-    res.status(400).json({ erro: "Não foi possível publicar o edital", detalhes: error });
+    } catch (error) {
+    console.error(error);
+    res.status(400).json({ erro: "Não foi possível publicar o edital", detalhes: String(error) });
   }
 });
 
@@ -282,6 +283,115 @@ app.get("/categorias", async (req, res) => {
 app.get("/cidades", async (req, res) => {
   const cidades = await prisma.cidades.findMany();
   res.json(cidades);
+});
+
+// Atualiza o status de um edital (ex: encerrar)
+app.patch("/editais/:id/status", async (req, res) => {
+  try {
+    const editalId = Number(req.params.id);
+    const { status } = req.body; // "aberto" | "em_analise" | "encerrado"
+
+    const edital = await prisma.editais.update({
+      where: { id: editalId },
+      data: { status },
+    });
+
+    res.json(edital);
+  } catch (error) {
+    res.status(400).json({ erro: "Não foi possível atualizar o status", detalhes: error });
+  }
+});
+
+// Lista as inscrições de um edital específico, com dados do artista
+app.get("/editais/:id/inscricoes", async (req, res) => {
+  try {
+    const editalId = Number(req.params.id);
+
+    const inscricoes = await prisma.inscricoes.findMany({
+      where: { edital_id: editalId },
+      include: {
+        artistas: {
+          select: { id: true, nome: true, curriculo: true, portfolio_url: true },
+        },
+      },
+      orderBy: { inscrito_em: "asc" },
+    });
+
+    res.json(inscricoes);
+    } catch (error) {
+    console.error(error);
+    res.status(400).json({ erro: "Não foi possível publicar o edital", detalhes: String(error) });
+  }
+});
+
+// Atualiza o status de uma inscrição (selecionar/rejeitar)
+app.patch("/inscricoes/:id/status", async (req, res) => {
+  try {
+    const inscricaoId = Number(req.params.id);
+    const { status } = req.body; // "pendente" | "selecionado" | "nao_selecionado"
+
+    const inscricao = await prisma.inscricoes.update({
+      where: { id: inscricaoId },
+      data: { status },
+    });
+
+    res.json(inscricao);
+  } catch (error) {
+    res.status(400).json({ erro: "Não foi possível atualizar a inscrição", detalhes: error });
+  }
+});
+
+// Busca um edital específico, com todos os detalhes
+app.get("/editais/:id", async (req, res) => {
+  try {
+    const editalId = Number(req.params.id);
+    const edital = await prisma.editais.findUnique({
+      where: { id: editalId },
+      include: {
+        categorias: true,
+        especialidades: true,
+        edital_cidades: { include: { cidades: true } },
+      },
+    });
+    if (!edital) return res.status(404).json({ erro: "Edital não encontrado" });
+    res.json(edital);
+    } catch (error) {
+    console.error(error);
+    res.status(400).json({ erro: "Não foi possível publicar o edital", detalhes: String(error) });
+  }
+});
+
+// Atualiza todos os dados de um edital (edição completa)
+app.put("/editais/:id", async (req, res) => {
+  try {
+    const editalId = Number(req.params.id);
+    const { titulo, categoria_id, especialidade_id, cidade_ids, descricao, premio, prazo_inscricao, exige_documentos, vagas } = req.body;
+
+    // Refaz os vínculos de cidade do zero (apaga os antigos, cria os novos)
+    await prisma.edital_cidades.deleteMany({ where: { edital_id: editalId } });
+
+    const edital = await prisma.editais.update({
+      where: { id: editalId },
+      data: {
+        titulo,
+        categoria_id,
+        especialidade_id,
+        descricao,
+        premio,
+        prazo_inscricao: new Date(prazo_inscricao),
+        exige_documentos,
+        vagas,
+        edital_cidades: {
+          create: (cidade_ids || []).map((id: number) => ({ cidade_id: id })),
+        },
+      },
+      include: { edital_cidades: true },
+    });
+
+    res.json(edital);
+  } catch (error) {
+    res.status(400).json({ erro: "Não foi possível atualizar o edital", detalhes: error });
+  }
 });
 
 const PORT = 3000;

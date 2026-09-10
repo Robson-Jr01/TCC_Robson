@@ -68,7 +68,11 @@ export default function Dashboard() {
                 <tbody>
                   {editais.map((edital) => (
                     <tr key={edital.id}>
-                      <Td>{edital.titulo}</Td>
+                      <Td>
+                        <span onClick={() => navigate(`/editais/${edital.id}`)} style={{ color: "var(--cor-primaria)", cursor: "pointer" }}>
+                        {edital.titulo}
+                        </span>
+                      </Td>
                       <Td>{edital.categorias.nome}</Td>
                       <Td>{new Date(edital.prazo_inscricao).toLocaleDateString("pt-BR")}</Td>
                       <Td><b>{edital._count.inscricoes}</b> candidatos</Td>

@@ -15,8 +15,8 @@ export default function Sidebar({ paginaAtiva }: { paginaAtiva: string }) {
       </div>
       <MenuItem label="Painel" ativo={paginaAtiva === "painel"} aoClicar={() => navigate("/painel")} />
       <MenuItem label="Publicar edital" ativo={paginaAtiva === "publicar-edital"} aoClicar={() => navigate("/publicar-edital")} />
-      <MenuItem label="Meus editais" ativo={paginaAtiva === "meus-editais"} />
-      <MenuItem label="Inscrições" ativo={paginaAtiva === "inscricoes"} />
+      <MenuItem label="Meus editais" ativo={paginaAtiva === "meus-editais"} aoClicar={() => navigate("/meus-editais")} />
+      <MenuItem label="Inscrições" ativo={paginaAtiva === "inscricoes"} aoClicar={() => navigate("/inscricoes")} />
       <div style={{ marginTop: "auto", padding: "8px 16px" }}>
         <button onClick={handleLogout} style={{ fontSize: 12, color: "#999", background: "none", border: "none" }}>
           Sair
