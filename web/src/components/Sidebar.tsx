@@ -10,7 +10,7 @@ export default function Sidebar({ paginaAtiva }: { paginaAtiva: string }) {
 
   return (
     <div style={{ width: 200, background: "#fff", borderRight: "0.5px solid var(--cor-borda)", padding: "16px 0", flexShrink: 0, display: "flex", flexDirection: "column" }}>
-      <div style={{ padding: "0 16px 16px", fontSize: 14, fontWeight: 500, color: "var(--cor-primaria)", borderBottom: "0.5px solid #eee", marginBottom: 8 }}>
+      <div style={{ padding: "0 16px 16px", fontSize: 14, fontWeight: 500, color: "var(--cor-primaria)", borderBottom: "0.5px solid #eee", marginBottom: 8, fontFamily: "serif" }}>
         PECAC
       </div>
       <MenuItem label="Painel" ativo={paginaAtiva === "painel"} aoClicar={() => navigate("/painel")} />

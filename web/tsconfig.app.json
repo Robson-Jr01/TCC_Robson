@@ -22,5 +22,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src", "src/components", "../mobile/src/screens/Home.tsx", "../mobile/src/components/BottomNav.tsx"]
 }

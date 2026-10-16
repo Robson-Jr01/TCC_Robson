@@ -74,7 +74,7 @@ export default function Dashboard() {
                         </span>
                       </Td>
                       <Td>{edital.categorias.nome}</Td>
-                      <Td>{new Date(edital.prazo_inscricao).toLocaleDateString("pt-BR")}</Td>
+                      <Td>{new Date(edital.prazo_inscricao).toLocaleDateString("pt-BR", { timeZone: "UTC" })}</Td>
                       <Td><b>{edital._count.inscricoes}</b> candidatos</Td>
                       <Td><StatusBadge status={edital.status} /></Td>
                     </tr>

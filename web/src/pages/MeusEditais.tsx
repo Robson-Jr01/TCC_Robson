@@ -63,7 +63,7 @@ export default function MeusEditais() {
                       </span>
                     </Td>
                     <Td>{edital.categorias.nome}</Td>
-                    <Td>{new Date(edital.prazo_inscricao).toLocaleDateString("pt-BR")}</Td>
+                    <Td>{new Date(edital.prazo_inscricao).toLocaleDateString("pt-BR", { timeZone: "UTC" })}</Td>
                     <Td>{edital.vagas ?? "Sem limite"}</Td>
                     <Td><b>{edital._count.inscricoes}</b></Td>
                     <Td><StatusBadge status={edital.status} /></Td>

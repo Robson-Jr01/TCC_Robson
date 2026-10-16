@@ -196,13 +196,30 @@ app.post("/inscricoes", async (req, res) => {
   try {
     const { edital_id, artista_id, documentos_url } = req.body;
 
+    const edital = await prisma.editais.findUnique({ where: { id: edital_id } });
+    if (!edital) return res.status(404).json({ erro: "Edital não encontrado" });
+    if (edital.status !== "aberto") {
+      return res.status(400).json({ erro: "Este edital não está aberto para inscrições" });
+    }
+
+    if (edital.vagas !== null) {
+      const total = await prisma.inscricoes.count({ where: { edital_id } });
+      if (total >= edital.vagas) {
+        return res.status(400).json({ erro: "Vagas esgotadas para este edital" });
+      }
+    }
+
+    const jaInscrito = await prisma.inscricoes.findFirst({ where: { edital_id, artista_id } });
+    if (jaInscrito) return res.status(400).json({ erro: "Você já está inscrito neste edital" });
+
     const inscricao = await prisma.inscricoes.create({
       data: { edital_id, artista_id, documentos_url },
     });
 
     res.status(201).json(inscricao);
   } catch (error) {
-    res.status(400).json({ erro: "Não foi possível se inscrever", detalhes: error });
+    console.error(error);
+    res.status(400).json({ erro: "Não foi possível se inscrever", detalhes: String(error) });
   }
 });
 
@@ -402,6 +419,54 @@ app.put("/editais/:id", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(400).json({ erro: "Não foi possível atualizar o edital", detalhes: String(error) });
+  }
+});
+
+// Editais abertos compatíveis com o perfil de um artista
+app.get("/artistas/:id/editais-compativeis", async (req, res) => {
+  try {
+    const artistaId = Number(req.params.id);
+
+    const artista = await prisma.artistas.findUnique({
+      where: { id: artistaId },
+      include: {
+        artista_especialidades: { include: { especialidades: true } },
+        artista_cidades: true,
+      },
+    });
+    if (!artista) return res.status(404).json({ erro: "Artista não encontrado" });
+
+    const especialidadeIds = artista.artista_especialidades.map((ae) => ae.especialidade_id);
+    const categoriaIds = artista.artista_especialidades.map((ae) => ae.especialidades.categoria_id);
+    const cidadeIds = artista.artista_cidades.map((ac) => ac.cidade_id);
+
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const editais = await prisma.editais.findMany({
+      where: {
+        status: "aberto",
+        prazo_inscricao: { gte: hoje },
+        edital_cidades: { some: { cidade_id: { in: cidadeIds } } },
+        OR: [
+          { especialidade_id: { in: especialidadeIds } },
+          { especialidade_id: null, categoria_id: { in: categoriaIds } },
+        ],
+      },
+      include: {
+        categorias: true,
+        edital_cidades: { include: { cidades: true } },
+        inscricoes: { where: { artista_id: artistaId }, select: { id: true } },
+      },
+      orderBy: { prazo_inscricao: "asc" },
+    });
+
+    res.json(
+      editais.map(({ inscricoes, ...edital }) => ({ ...edital, ja_inscrito: inscricoes.length > 0 }))
+    );
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ erro: "Não foi possível listar os editais", detalhes: String(error) });
   }
 });
 
