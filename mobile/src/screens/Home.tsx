@@ -36,7 +36,14 @@ function formatarPrazo(iso: string) {
   return `${dia}/${mes}`;
 }
 
-export default function Home({ usuario }: { usuario: Usuario }) {
+type Props = {
+  usuario: Usuario;
+  naoLidas: number;
+  aoAbrirNotificacoes: () => void;
+  aoAbrirEdital: (id: number) => void;
+};
+
+export default function Home({ usuario, naoLidas, aoAbrirNotificacoes, aoAbrirEdital }: Props) {
   const insets = useSafeAreaInsets();
   const [editais, setEditais] = useState<Edital[]>([]);
   const [busca, setBusca] = useState("");
@@ -79,17 +86,6 @@ export default function Home({ usuario }: { usuario: Usuario }) {
     }
   }
 
-  function verDetalhes(edital: Edital) {
-    const partes = [
-      edital.descricao,
-      edital.premio ? `Prêmio: ${edital.premio}` : null,
-      edital.exige_documentos
-        ? `Documentos: ${edital.instrucoes_documentos ?? "consulte o publicador"}`
-        : null,
-    ].filter(Boolean);
-    Alert.alert(edital.titulo, partes.join("\n\n") || "Sem detalhes adicionais.");
-  }
-
   const filtrados = editais.filter((e) =>
     e.titulo.toLowerCase().includes(busca.toLowerCase())
   );
@@ -99,9 +95,14 @@ export default function Home({ usuario }: { usuario: Usuario }) {
     <View style={estilos.tela}>
       <View style={[estilos.topo, { paddingTop: insets.top + 10 }]}>
         <Text style={estilos.logo}>PECAC</Text>
-        <View style={estilos.sino}>
+                <TouchableOpacity style={estilos.sino} onPress={aoAbrirNotificacoes}>
           <Feather name="bell" size={16} color="#4a35d4" />
-        </View>
+          {naoLidas > 0 && (
+            <View style={estilos.selo}>
+              <Text style={estilos.seloTexto}>{naoLidas > 9 ? "9+" : naoLidas}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -147,7 +148,7 @@ export default function Home({ usuario }: { usuario: Usuario }) {
             <CartaoEdital
               edital={destaque}
               aoInscrever={() => inscrever(destaque)}
-              aoVerDetalhes={() => verDetalhes(destaque)}
+              aoVerDetalhes={() => aoAbrirEdital(destaque.id)}
             />
 
             {demais.length > 0 && <Text style={estilos.secao}>Compatíveis com você</Text>}
@@ -156,7 +157,7 @@ export default function Home({ usuario }: { usuario: Usuario }) {
                 key={edital.id}
                 edital={edital}
                 aoInscrever={() => inscrever(edital)}
-                aoVerDetalhes={() => verDetalhes(edital)}
+                aoVerDetalhes={() => aoAbrirEdital(edital.id)}
               />
             ))}
           </>
@@ -232,6 +233,11 @@ const estilos = StyleSheet.create({
     width: 32, height: 32, borderRadius: 16, backgroundColor: "#f0eefe",
     alignItems: "center", justifyContent: "center",
   },
+    selo: {
+    position: "absolute", top: -3, right: -3, minWidth: 16, height: 16, borderRadius: 8,
+    backgroundColor: "#e24b4a", alignItems: "center", justifyContent: "center", paddingHorizontal: 3,
+  },
+  seloTexto: { color: "#fff", fontSize: 9, fontWeight: "700" },
   conteudo: { padding: 14, paddingBottom: 24 },
   saudacao: { fontSize: 14, color: "#666" },
   saudacaoNome: { color: "#1a1a2e", fontWeight: "600" },

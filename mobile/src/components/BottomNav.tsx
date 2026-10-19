@@ -21,7 +21,13 @@ export default function BottomNav({ ativa, aoMudar }: { ativa: Aba; aoMudar: (ab
         return (
           <TouchableOpacity key={aba.id} style={estilos.item} onPress={() => aoMudar(aba.id)}>
             <Feather name={aba.icone} size={20} color={ativaAgora ? "#4a35d4" : "#aaa"} />
-            <Text style={[estilos.rotulo, ativaAgora && estilos.rotuloAtivo]}>{aba.rotulo}</Text>
+            <Text
+              style={[estilos.rotulo, ativaAgora && estilos.rotuloAtivo]}
+              numberOfLines={1}
+              allowFontScaling={false}
+            >
+              {aba.rotulo}
+            </Text>
           </TouchableOpacity>
         );
       })}
@@ -39,6 +45,6 @@ const estilos = StyleSheet.create({
     paddingTop: 10,
   },
   item: { alignItems: "center", gap: 3, flex: 1 },
-  rotulo: { fontSize: 9, color: "#aaa" },
-  rotuloAtivo: { color: "#4a35d4", fontWeight: "600" },
+  rotulo: { fontSize: 9, color: "#aaa", fontWeight: "500" },
+  rotuloAtivo: { color: "#4a35d4" },
 });
